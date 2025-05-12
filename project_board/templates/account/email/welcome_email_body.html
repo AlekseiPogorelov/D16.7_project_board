@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добро пожаловать</title>
+</head>
+<body>
+    <p>Здравствуйте, <strong>{{ user.email }}</strong>!</p>
+    <p>Вы успешно зарегистрировались на <a href="{{ protocol }}://{{ site_name }}">{{ site_name }}</a>.</p>
+    <p><a href="{{ protocol }}://{{ site_name }}/articles">Перейти к объявлениям</a></p>
+    <p>С уважением,<br>Команда {{ site_name }}</p>
+</body>
+</html>

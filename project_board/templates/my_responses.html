@@ -1,0 +1,58 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+<h2>Отклики на мои объявления</h2>
+
+<form method="get">
+    <label>Фильтр по объявлению:</label>
+    <select name="article" onchange="this.form.submit()">
+        <option value="">Все объявления</option>
+        {% for article in articles %}
+            <option value="{{ article.id }}" {% if article == selected_article %}selected{% endif %}>
+                {{ article.title }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<table class="table">
+    <tr>
+        <th>Объявление</th>
+        <th>Текст отклика</th>
+        <th>Автор отклика</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
+    {% for resp in responses %}
+    <tr>
+        <td>{{ resp.article.title }}</td>
+        <td>{{ resp.text }}</td>
+        <td>{{ resp.author.email }}</td>
+        <td>
+            {% if resp.status %}
+                <span class="text-success">Принят</span>
+            {% else %}
+                <span class="text-secondary">Ожидает</span>
+            {% endif %}
+        </td>
+        <td>
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="response_id" value="{{ resp.id }}">
+                <button type="submit" name="delete_response" class="btn btn-danger btn-sm">Удалить</button>
+            </form>
+            {% if not resp.status %}
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="response_id" value="{{ resp.id }}">
+                <button type="submit" name="accept_response" class="btn btn-success btn-sm">Принять</button>
+            </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Нет откликов.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

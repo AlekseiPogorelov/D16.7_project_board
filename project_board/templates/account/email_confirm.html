@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+{% load i18n %}
+{% block content %}
+<h2>Подтверждение аккаунта</h2>
+<form method="post">
+  {% csrf_token %}
+  <label for="id_email">Email:</label>
+  <input type="email" name="email" id="id_email" required class="form-control">
+  <label for="id_code">Код подтверждения:</label>
+  <input type="text" name="code" id="id_code" maxlength="6" required class="form-control">
+  <button type="submit" class="btn btn-primary">Подтвердить</button>
+</form>
+{% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %}
+{% endblock %}

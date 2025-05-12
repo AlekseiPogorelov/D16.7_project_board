@@ -1,0 +1,10 @@
+{% load account %}
+{% user_display user as user_display %}
+
+Добро пожаловать на наш сайт, {{ user_display }}!
+
+Для завершения регистрации введите следующий код подтверждения:
+
+Код: {{ user.confirmation_code }}
+
+Спасибо!

@@ -1,0 +1,15 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Удаление объявления</h1>
+<hr>
+    {% if user == article.author %}
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Удаляем "{{ object.title }}"?</p>
+    <input type="submit" value="Delete" />
+</form>
+    {% else %}
+<p> Вы не можете удалять чужие объявления </p>
+    {% endif %}
+{% endblock content %}

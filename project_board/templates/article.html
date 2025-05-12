@@ -1,0 +1,60 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="container my-4">
+
+    <h1 class="mb-4">{{ article.title }}</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p>{{ article.text }}</p>
+            {% if article.upload %}
+                <img src="{{ article.upload.url }}" alt="Изображение объявления" class="img-fluid rounded mt-3" style="max-width: 100%; height: auto;">
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Категория:</strong> {{ article.category.get_name_display }}</li>
+                <li class="list-group-item"><strong>Автор:</strong> {{ article.author.email }}</li>
+                <li class="list-group-item"><strong>Дата публикации:</strong> {{ article.article_time|date:"d M Y" }}</li>
+            </ul>
+
+            {% if article.pk and request.user == article.author %}
+            <div class="mt-3">
+                <a href="{% url 'article_update' pk=article.pk %}" class="btn btn-primary me-2">Редактировать</a>
+                <a href="{% url 'article_delete' pk=article.pk %}" class="btn btn-danger">Удалить</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr>
+
+    <h3>Добавить отклик</h3>
+    <form action="" method="post" class="mb-5">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Добавить отклик</button>
+    </form>
+
+    {% if article.userresponse_set.all %}
+        <h3>Все отклики на объявление:</h3>
+        <ul class="list-group">
+            {% for ar in article.userresponse_set.all %}
+                <li class="list-group-item">
+                    <strong>От {{ ar.author.email }}:</strong> {{ ar.text }}
+                    {% if ar.status %}
+                        <span class="badge bg-success ms-2">Принят</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Откликов пока нет.</p>
+    {% endif %}
+</div>
+{% endblock content %}
